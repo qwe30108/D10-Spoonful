@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, Outlet } from "react-router";
 import Footer from "./Footer";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 function FrontendLayout() {
   return (
