@@ -1,9 +1,14 @@
 import React from "react";
-import { Link, Outlet } from "react-router";
+import { Link, Outlet, useNavigate } from "react-router";
 import Footer from "./Footer";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 function FrontendLayout() {
+  const navigate = useNavigate();
+
+  const goLogin = () => {
+    navigate("/login");
+  };
   return (
     <>
       <header>
@@ -65,6 +70,7 @@ function FrontendLayout() {
                       href="login-register.html"
                       role="button"
                       type="button"
+                      onClick={() => goLogin()}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -95,10 +101,7 @@ function FrontendLayout() {
                     </button>
                   </li>
                   <li className="nav-item login-link me-4 py-4 my-lg-auto d-lg-none d-md-block">
-                    <Link
-                      className="nav-link text-primary-950"
-                      to="login-register.html"
-                    >
+                    <Link className="nav-link text-primary-950" to="/login">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         version="1.1"
