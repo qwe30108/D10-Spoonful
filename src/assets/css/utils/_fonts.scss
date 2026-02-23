@@ -3,10 +3,12 @@
   src: url("../../fonts/GenSenRounded2TW-B.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
+  font-display: swap; //先顯示替代文字，載入完再換掉
 }
 @font-face {
   font-family: "GenSenRounded";
   src: url("../../fonts/GenSenRounded2TW-R.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
+  font-display: swap; //先顯示替代文字，載入完再換掉
 }
