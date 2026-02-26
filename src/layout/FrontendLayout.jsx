@@ -1,13 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Link, Outlet, useNavigate } from "react-router";
 import Footer from "./Footer";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 function FrontendLayout() {
+  const baseURL = "https://datasofspoonful.zeabur.app";
+  const [isAuth, setIsAuth] = useState(false);
   const navigate = useNavigate();
 
   const goLogin = () => {
     navigate("/login");
+  };
+
+  useEffect(() => {
+    const token = document.cookie
+      .split(";")
+      .find((row) => row.startsWith("hexToken="))
+      ?.split("=")[1];
+    if (token) {
+      //設定axios預設header
+      axios.defaults.headers.common.Authorization = token;
+      setIsAuth(true);
+    } else {
+      setIsAuth(false);
+    }
+  }, []);
+
+  const logOut = async () => {
+    try {
+      const response = await axios.post(`${baseURL}/logout`);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
   };
   return (
     <>
@@ -64,72 +90,135 @@ function FrontendLayout() {
                       關於食噗否
                     </Link>
                   </li>
-                  <li className="nav-item me-4 mb-4 my-lg-auto d-none d-lg-block">
-                    <button
-                      className="btn btn-secondary-700 rounded-pill py-3 px-6"
-                      href="login-register.html"
-                      role="button"
-                      type="button"
-                      onClick={() => goLogin()}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        version="1.1"
-                        xmlnsXlink="http://www.w3.org/1999/xlink"
-                        width="16"
-                        height="16"
-                        x="0"
-                        y="0"
-                        viewBox="0 0 24 24"
-                        style={{ enableBackground: "new 0 0 512 512" }}
-                        xmlSpace="preserve"
-                        className=""
+                  {!isAuth ? (
+                    <>
+                      <li className="nav-item me-4 mb-4 my-lg-auto d-none d-lg-block">
+                        <button
+                          className="btn btn-secondary-700 rounded-pill py-3 px-6"
+                          href="login-register.html"
+                          role="button"
+                          type="button"
+                          onClick={() => goLogin()}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            version="1.1"
+                            xmlnsXlink="http://www.w3.org/1999/xlink"
+                            width="16"
+                            height="16"
+                            x="0"
+                            y="0"
+                            viewBox="0 0 24 24"
+                            style={{ enableBackground: "new 0 0 512 512" }}
+                            xmlSpace="preserve"
+                            className=""
+                          >
+                            <g>
+                              <g
+                                fill="#000"
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                              >
+                                <path
+                                  d="M12 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM9 13c-1.663 0-3.262.758-4.199 1.9-.475.58-.81 1.297-.839 2.092-.03.812.263 1.604.868 2.295C6.302 20.972 8.653 22 12 22s5.698-1.028 7.17-2.713c.605-.691.898-1.483.868-2.295-.03-.795-.363-1.512-.84-2.092C18.263 13.76 16.664 13 15 13z"
+                                  fill="#ffffff"
+                                  opacity="1"
+                                  data-original="#000000"
+                                  className="me-2"
+                                ></path>
+                              </g>
+                            </g>
+                          </svg>
+                          登入/註冊
+                        </button>
+                      </li>
+                      <li className="nav-item login-link me-4 py-4 my-lg-auto d-lg-none d-md-block">
+                        <Link className="nav-link text-primary-950" to="/login">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            version="1.1"
+                            xmlnsXlink="http://www.w3.org/1999/xlink"
+                            width="16"
+                            height="16"
+                            x="0"
+                            y="0"
+                            viewBox="0 0 24 24"
+                            style={{ enableBackground: "new 0 0 512 512" }}
+                            xmlSpace="preserve"
+                            className="me-2"
+                          >
+                            <g>
+                              <g
+                                fill="#000"
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                              >
+                                <path
+                                  d="M12 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM9 13c-1.663 0-3.262.758-4.199 1.9-.475.58-.81 1.297-.839 2.092-.03.812.263 1.604.868 2.295C6.302 20.972 8.653 22 12 22s5.698-1.028 7.17-2.713c.605-.691.898-1.483.868-2.295-.03-.795-.363-1.512-.84-2.092C18.263 13.76 16.664 13 15 13z"
+                                  fill="#efab23"
+                                  opacity="1"
+                                  data-original="#000000"
+                                  className=""
+                                ></path>
+                              </g>
+                            </g>
+                          </svg>
+                          登入/註冊
+                        </Link>
+                      </li>
+                    </>
+                  ) : (
+                    <div className="dropdown">
+                      <button
+                        className="btn btn-white dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
                       >
-                        <g>
-                          <g fill="#000" fillRule="evenodd" clipRule="evenodd">
-                            <path
-                              d="M12 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM9 13c-1.663 0-3.262.758-4.199 1.9-.475.58-.81 1.297-.839 2.092-.03.812.263 1.604.868 2.295C6.302 20.972 8.653 22 12 22s5.698-1.028 7.17-2.713c.605-.691.898-1.483.868-2.295-.03-.795-.363-1.512-.84-2.092C18.263 13.76 16.664 13 15 13z"
-                              fill="#ffffff"
-                              opacity="1"
-                              data-original="#000000"
-                              className="me-2"
-                            ></path>
-                          </g>
-                        </g>
-                      </svg>
-                      登入/註冊
-                    </button>
-                  </li>
-                  <li className="nav-item login-link me-4 py-4 my-lg-auto d-lg-none d-md-block">
-                    <Link className="nav-link text-primary-950" to="/login">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        version="1.1"
-                        xmlnsXlink="http://www.w3.org/1999/xlink"
-                        width="16"
-                        height="16"
-                        x="0"
-                        y="0"
-                        viewBox="0 0 24 24"
-                        style={{ enableBackground: "new 0 0 512 512" }}
-                        xmlSpace="preserve"
-                        className="me-2"
-                      >
-                        <g>
-                          <g fill="#000" fillRule="evenodd" clipRule="evenodd">
-                            <path
-                              d="M12 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM9 13c-1.663 0-3.262.758-4.199 1.9-.475.58-.81 1.297-.839 2.092-.03.812.263 1.604.868 2.295C6.302 20.972 8.653 22 12 22s5.698-1.028 7.17-2.713c.605-.691.898-1.483.868-2.295-.03-.795-.363-1.512-.84-2.092C18.263 13.76 16.664 13 15 13z"
-                              fill="#efab23"
-                              opacity="1"
-                              data-original="#000000"
-                              className=""
-                            ></path>
-                          </g>
-                        </g>
-                      </svg>
-                      登入/註冊
-                    </Link>
-                  </li>
+                        <img
+                          src="/assets/images/user.png"
+                          className="userimg me-1"
+                          alt="會員圖片"
+                        />
+                        使用者姓名
+                      </button>
+                      <ul className="dropdown-menu">
+                        <li>
+                          <Link
+                            className="dropdown-item text-primary-950"
+                            to="#"
+                          >
+                            個人資料
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="dropdown-item text-primary-950"
+                            to="blacklist-favorites"
+                          >
+                            我的黑名單/喜愛清單
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="dropdown-item text-primary-950"
+                            to="#"
+                          >
+                            分享餐點紀錄
+                          </Link>
+                        </li>
+                        <li>
+                          <a
+                            className="dropdown-item text-primary-950"
+                            href="#"
+                            onClick={() => logOut()}
+                          >
+                            登出
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
                 </ul>
               </div>
             </div>

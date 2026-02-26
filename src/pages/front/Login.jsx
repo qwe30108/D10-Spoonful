@@ -1,12 +1,42 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 function Login() {
+  const baseURL = "https://datasofspoonful.zeabur.app";
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+  });
+
+  const [token, setToken] = useState("");
+
+  const signIn = async (formData) => {
+    try {
+      const response = await axios.post(`${baseURL}/login`, formData);
+      console.log(response.data);
+      const { token, expired } = response.data;
+
+      document.cookie = `hexToken=${token};expires=${new Date(expired)};`;
+
+      axios.defaults.headers.common.Authorization = token;
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
+  };
+
   return (
     <div className=" bg-primary-50">
       <div className="container mx-auto py-5">
         <div className="row py-120">
-          <form className="login-form mx-auto rounded-5 bg-white col-10 col-lg-4 p-6">
+          <form
+            className="login-form mx-auto rounded-5 bg-white col-10 col-lg-4 p-6"
+            onSubmit={handleSubmit(signIn)}
+          >
             {/* login title  */}
             <div className="mb-5">
               <h1 className="text-center fs-3 text-primary-950">登入帳號</h1>
@@ -15,16 +45,23 @@ function Login() {
             {/* 帳密表單  */}
             <div className="mb-3">
               <label
-                htmlFor="username"
+                htmlFor="email"
                 className="form-label text-center fs-4 text-primary-950"
               >
                 帳號
               </label>
               <input
-                type="text"
+                type="email"
                 className="form-control  fs-5 text-gray-700"
-                id="username"
+                id="email"
                 placeholder="請輸入帳號"
+                {...register("email", {
+                  required: "請輸入 Email 帳號",
+                  pattern: {
+                    value: /^\S+@\S+$/i,
+                    message: "Email 格式不正確",
+                  },
+                })}
               />
             </div>
             <div className="mb-3">
@@ -39,6 +76,13 @@ function Login() {
                 className="form-control  fs-5 text-gray-700"
                 id="userpassword"
                 placeholder="請輸入密碼"
+                {...register("password", {
+                  required: "請輸入密碼",
+                  minLength: {
+                    value: 6,
+                    message: "密碼長度至少6碼",
+                  },
+                })}
               />
             </div>
 

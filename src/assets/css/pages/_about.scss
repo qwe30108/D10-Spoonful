@@ -1,34 +1,34 @@
 .about-background {
   height: 450px;
   background:
-    url(/src/assets/images/searchbar-bg-sm.png),
+    url("/src/assets/images/searchbar-bg.png"),
     linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-    url(/src/assets/images/coriander-spoon.png);
+    url("/src/assets/images/coriander-spoon.png");
 
   background-position:
     center bottom,
     center center,
     center center;
   background-size:
-    100% 50px,
+    100% auto,
     cover,
     cover;
   background-repeat: no-repeat;
 
   margin-bottom: 60px;
   padding-top: 80px;
-  @include lg-pad {
+  @include mobile {
     height: 300px;
     background:
-      url(/src/assets/images/searchbar-bg.png),
+      url("/src/assets/images/searchbar-bg-sm.png"),
       linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-      url(/src/assets/images/coriander-spoon.png);
+      url("/src/assets/images/coriander-spoon.png");
     background-position:
       center bottom,
       center center,
       center center;
     background-size:
-      100% 115px,
+      100% auto,
       cover,
       cover;
     background-repeat: no-repeat;
