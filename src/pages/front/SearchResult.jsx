@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams, Link } from "react-router";
 import axios from "axios";
 import feather from "feather-icons";
 import TagBadge from "../../component/TagBadge";
@@ -8,32 +9,80 @@ function SearchResults() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [searchParams] = useSearchParams();
+
+  const initialTitle = searchParams.get("title") || "";
+  const initialCity = searchParams.get("city") || "台北市";
+  const tagsStr = searchParams.get("tags");
+  const initialTags = tagsStr ? tagsStr.split(",") : [];
+  const [title, setTitle] = useState(initialTitle);
+  const [city, setCity] = useState(initialCity);
+  const [tags, setTags] = useState(initialTags);
+
+  const [isTagsOpen, setIsTagsOpen] = useState(false);
+  const [isCityOpen, setIsCityOpen] = useState(false);
+
+  useEffect(() => {
+    setTitle(searchParams.get("title") || "");
+    setCity(searchParams.get("city") || "台北市");
+    const ex = searchParams.get("tags");
+    setTags(ex ? ex.split(",") : []);
+  }, [searchParams]);
+
+  const handleCheckboxChange = (e) => {
+    const value = e.target.value;
+    if (e.target.checked) {
+      setTags([...tags, value]);
+    } else {
+      setTags(tags.filter((tag) => tag !== value));
+    }
+  };
+
+  const currentSearchParams = new URLSearchParams();
+  if (title) currentSearchParams.append("title", title);
+  if (city) currentSearchParams.append("city", city);
+  if (tags.length > 0) currentSearchParams.append("tags", tags.join(","));
+  const targetUrl = `/searchResult?${currentSearchParams.toString()}`;
+
   const baseURL = "https://datasofspoonful.zeabur.app";
 
   const getSearchDishes = async () => {
     try {
-      const title = "牛肉麵";
-      const excludedTags = ["蒜"];
-      const allowedCities = ["台北"];
-
-      const response = await axios.get(`${baseURL}/dishes`, {
-        params: {
-          status: "published",
-          title_like: title,
-          _expand: "restaurant",
-        },
-      });
-
       setIsLoading(true);
 
+      const searchedType = searchParams.get("type") || "";
+      const searchTitle = searchParams.get("title") || "";
+      const searchCity = searchParams.get("city") || "";
+      const tagsStr = searchParams.get("tags");
+      const tagsArray = tagsStr ? tagsStr.split(",") : [];
+
+      const apiParams = {
+        status: "published",
+        _expand: "restaurant",
+      };
+
+      if (searchedType) {
+        apiParams.category = searchedType;
+      }
+      if (searchTitle) {
+        apiParams.title_like = searchTitle;
+      }
+
+      const response = await axios.get(`${baseURL}/dishes`, {
+        params: apiParams,
+      });
+
       const filterDishes = response.data.filter((dish) => {
-        const hasExcludedTag = dish.tags.some((tag) =>
-          excludedTags.includes(tag),
-        );
-        const isInAllowedCity = allowedCities.some((city) =>
-          dish.restaurant.address.includes(city),
-        );
-        return !hasExcludedTag && isInAllowedCity;
+        const hasTagsdTag =
+          tagsArray.length > 0
+            ? dish.tags.some((tag) => tagsArray.includes(tag))
+            : false;
+        const restaurantAddress = dish.restaurant?.address || "";
+        const isInAllowedCity = searchCity
+          ? restaurantAddress.includes(searchCity) ||
+            searchCity.includes(restaurantAddress)
+          : true;
+        return !hasTagsdTag && isInAllowedCity;
       });
       //console.log(filterDishes);
       setDishes(filterDishes);
@@ -45,12 +94,10 @@ function SearchResults() {
     }
   };
 
-  //取得餐點資訊
   useEffect(() => {
     getSearchDishes();
-  }, []);
+  }, [searchParams]);
 
-  //document.title
   useEffect(() => {
     document.title = "餐點結果列表";
 
@@ -87,6 +134,27 @@ function SearchResults() {
       </span>
     );
   };
+
+  const ingredientsList = [
+    "蔥",
+    "薑",
+    "蒜",
+    "香菜",
+    "洋蔥",
+    "辣",
+    "番茄",
+    "生菜",
+    "牛肉",
+  ];
+  const citiesList = [
+    "台北市",
+    "新北市",
+    "桃園市",
+    "新竹縣",
+    "苗栗縣",
+    "台中市",
+    "彰化縣",
+  ];
 
   return (
     <>
@@ -133,6 +201,8 @@ function SearchResults() {
                 className="form-control bg-transparent border border-0"
                 aria-describedby=""
                 placeholder="請輸入..."
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </div>
 
@@ -155,72 +225,59 @@ function SearchResults() {
                   className="btn dropdown-toggle"
                   type="button"
                   id="multiSelectDropdown"
-                  data-bs-toggle="dropdown"
                   aria-expanded="false"
                   aria-label="選擇項目"
+                  onClick={() => setIsTagsOpen(!isTagsOpen)}
                 >
-                  <div className="selected-items d-flex align-items-end"></div>
+                  <div className="selected-items d-flex align-items-end flex-wrap gap-1">
+                    {tags.length > 0 ? (
+                      tags.map((item) => (
+                        <span
+                          key={item}
+                          className="badge my-selected-badge d-flex align-items-center"
+                        >
+                          {item}
+                          <span
+                            className="remove-item ms-1"
+                            style={{ cursor: "pointer" }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setTags(tags.filter((tag) => tag !== item));
+                            }}
+                          >
+                            ×
+                          </span>
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-muted" style={{ opacity: 0.7 }}>
+                        請選擇...
+                      </span>
+                    )}
+                  </div>
                 </button>
 
                 <ul
-                  className="dropdown-menu"
+                  className={`dropdown-menu ${isTagsOpen ? "show" : ""}`}
                   aria-labelledby="multiSelectDropdown"
                 >
-                  <li>
-                    <div className="dropdown-item">
-                      <input type="checkbox" value="薑" id="checkbox1" />
-                      <label htmlFor="checkbox1" className="mb-2">
-                        薑
+                  {ingredientsList.map((ingredient, index) => (
+                    <li key={index}>
+                      <label
+                        className="dropdown-item d-block"
+                        style={{ cursor: "pointer" }}
+                      >
+                        <input
+                          type="checkbox"
+                          className="me-2"
+                          value={ingredient}
+                          checked={tags.includes(ingredient)}
+                          onChange={handleCheckboxChange}
+                        />
+                        {ingredient}
                       </label>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="dropdown-item">
-                      <input type="checkbox" value="蒜" id="checkbox2" />
-                      <label htmlFor="checkbox2" className="mb-2">
-                        蒜
-                      </label>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="dropdown-item">
-                      <input type="checkbox" value="香菜" id="checkbox3" />
-                      <label htmlFor="checkbox3" className="mb-2">
-                        香菜
-                      </label>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="dropdown-item">
-                      <input type="checkbox" value="洋蔥" id="checkbox4" />
-                      <label htmlFor="checkbox4" className="mb-2">
-                        洋蔥
-                      </label>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="dropdown-item">
-                      <input type="checkbox" value="番茄" id="checkbox5" />
-                      <label htmlFor="checkbox5" className="mb-2">
-                        番茄
-                      </label>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="dropdown-item">
-                      <input type="checkbox" value="生菜" id="checkbox6" />
-                      <label htmlFor="checkbox6" className="mb-2">
-                        生菜
-                      </label>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div className="dropdown-item">
-                      <input type="checkbox" value="牛肉" id="checkbox7" />
-                      <label htmlFor="checkbox7">牛肉</label>
-                    </div>
-                  </li>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -244,54 +301,35 @@ function SearchResults() {
                   className="btn dropdown-toggle"
                   type="button"
                   id="whereDropdownButton"
-                  data-bs-toggle="dropdown"
+                  //data-bs-toggle="dropdown"
                   aria-expanded="false"
+                  onClick={() => setIsCityOpen(!isCityOpen)}
                 >
-                  <span className="where-selected-item">台北市</span>
+                  <span className="where-selected-item">{city}</span>
                 </button>
-                <ul className="dropdown-menu">
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      台北市
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      新北市
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      桃園市
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      新竹縣
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      苗栗縣
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      台中市
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      彰化縣
-                    </a>
-                  </li>
+                <ul className={`dropdown-menu ${isCityOpen ? "show" : ""}`}>
+                  {citiesList.map((cityName, index) => (
+                    <li key={index}>
+                      <a
+                        className="dropdown-item"
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCity(cityName);
+                          setIsCityOpen(false);
+                        }}
+                      >
+                        {cityName}
+                      </a>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
-            <div className="search-button col-md-3 flex-grow-1 flex-lg-grow-0 align-self-end">
-              <button
-                type="button"
-                className="rounded-pill btn btn-secondary-700 px-24 py-12 border border-0"
+            <div className="search-button col-md-3  align-self-end">
+              <Link
+                to={targetUrl}
+                className=" rounded-pill btn btn-secondary-700 px-24 py-12 border border-0"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -304,7 +342,7 @@ function SearchResults() {
                   <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
                 </svg>
                 <span className="ms-2">搜尋</span>
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -407,8 +445,8 @@ function SearchResults() {
                       <div className="d-flex align-items-center flex-wrap flex-lg-nowrap">
                         <TagBadge tags={dish.tags} />
                         <div className="ms-lg-auto mx-auto mx-lg-0 flex-grow-1 flex-lg-grow-0">
-                          <button
-                            type="button"
+                          <Link
+                            to={`/dish/${dish.id}`}
                             className="btn rounded-pill text-white btn-secondary-700 py-3 px-lg-9 d-flex align-items-center justify-content-center w-100 w-lg-auto"
                           >
                             <span className="me-2">看更多</span>
@@ -417,7 +455,7 @@ function SearchResults() {
                               width="16px"
                               height="16px"
                             ></i>
-                          </button>
+                          </Link>
                         </div>
                       </div>
                     </div>

@@ -61,6 +61,7 @@
     cover,
     cover;
   background-repeat: no-repeat;
+  box-shadow: inset 0 -1px 0 0 var(--bs-primary-50); //底部陰影用來遮住交界處的線
 
   margin-bottom: 60px;
   padding-top: 80px;
