@@ -1,12 +1,13 @@
-import { createHashRouter } from "react-router";
-import FrontendLayout from "./layout/FrontendLayout";
-import Home from "./pages/front/home";
-import About from "./pages/front/About";
-import SearchResult from "./pages/front/SearchResult";
+import { createHashRouter } from 'react-router';
+import FrontendLayout from './layout/FrontendLayout';
+import Home from './pages/front/home';
+import About from './pages/front/About';
+import SearchResult from './pages/front/SearchResult';
+import MealsDetails from './pages/front/MealsDetails';
 
 export const router = createHashRouter([
   {
-    path: "/",
+    path: '/',
     element: <FrontendLayout />,
     children: [
       {
@@ -14,12 +15,16 @@ export const router = createHashRouter([
         element: <Home />,
       },
       {
-        path: "about",
+        path: 'about',
         element: <About />,
       },
       {
-        path: "searchResult",
+        path: 'searchResult',
         element: <SearchResult />,
+      },
+      {
+        path: 'mealsDetails',
+        element: <MealsDetails />,
       },
     ],
   },

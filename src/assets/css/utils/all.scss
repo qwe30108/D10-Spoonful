@@ -1,13 +1,18 @@
-@import "../utils/fonts";
+@import '../utils/fonts';
 
-@import "bootstrap/scss/functions";
+@import 'bootstrap/scss/functions';
 
-@import "./variables";
+@import './variables';
 
-@import "bootstrap/scss/bootstrap";
+@import 'bootstrap/scss/bootstrap';
 
-@import "../base/base";
-@import "./layout/header";
-@import "./layout/footer";
+@import url(https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css);
+@import url(https://cdn-uicons.flaticon.com/3.0.0/uicons-solid-rounded/css/uicons-solid-rounded.css);
+@import url(https://cdn-uicons.flaticon.com/3.0.0/uicons-bold-rounded/css/uicons-bold-rounded.css);
 
-@import "../pages/search-result";
+@import '../base/base';
+@import './layout/header';
+@import './layout/footer';
+
+@import '../pages/search-result';
+@import '../pages/meals-details';
