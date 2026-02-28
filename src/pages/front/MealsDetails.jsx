@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import feather from 'feather-icons';
 import TagBadge from '../../component/TagBadge';
+import ReportBtn from '../../component/ReportBtn';
 
 function CommentCard() {
   const baseURL = 'https://datasofspoonful.zeabur.app';
@@ -17,7 +18,7 @@ function CommentCard() {
     };
     getReviews();
   }, []);
-  if (reviews.length === 0) return <div>載入中...</div>;
+  if (reviews.length === 0) return <div>沒有相關評論</div>;
 
   const showReviews = reviews.filter((item) => item.dishId === 1);
   return (
@@ -170,12 +171,9 @@ function MealsDetails() {
                   <TagBadge tags={['紅蘿蔔', '洋蔥', '蔥', '番茄']} />
                 </div>
               </div>
-
               <div className='d-inline-flex align-items-center mt-4 mt-md-10'>
                 <p className='mb-0 me-4 fs-4 text-primary-950'>找不到想要的餐點嗎?</p>
-                <a className='btn btn-report rounded-1 d-flex align-items-center fs-5 py-1' href='return.html'>
-                  <span className='ms-2 fs-5'>回報餐點資訊</span>
-                </a>
+                <ReportBtn></ReportBtn>
               </div>
             </div>
           </div>
