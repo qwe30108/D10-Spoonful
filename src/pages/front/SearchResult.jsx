@@ -352,7 +352,10 @@ function SearchResults() {
         {/* <!-- 回報餐點資訊 --> */}
         <div className="d-flex justify-content-start align-items-center mb-5">
           <p className="mb-0 me-4 fs-4 text-primary-950">找不到想要的餐點嗎?</p>
-          <button className="btn btn-report rounded-1 d-flex align-items-center fs-5 py-1">
+          <Link
+            className="btn btn-report rounded-1 d-flex align-items-center fs-5 py-1"
+            to="/return"
+          >
             <svg
               width="12"
               height="12"
@@ -373,7 +376,7 @@ function SearchResults() {
               </defs>
             </svg>
             <span className="ms-2 fs-5">回報餐點資訊</span>
-          </button>
+          </Link>
         </div>
 
         {isLoading ? (
