@@ -194,7 +194,7 @@ function FrontendLayout() {
                         <li>
                           <Link
                             className="dropdown-item text-primary-950"
-                            to="blacklist-favorites"
+                            to="blacklistFavorites"
                           >
                             我的黑名單/喜愛清單
                           </Link>
@@ -202,7 +202,7 @@ function FrontendLayout() {
                         <li>
                           <Link
                             className="dropdown-item text-primary-950"
-                            to="#"
+                            to=""
                           >
                             分享餐點紀錄
                           </Link>
