@@ -1,0 +1,48 @@
+.return-header {
+  height: 364px;
+  background-image:
+    url("/src/assets/images/searchbar-bg.png"),
+    linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url("/src/assets/images/webp-images/earth-explode.webp");
+
+  background-position:
+    center bottom,
+    center center,
+    center center;
+  background-size:
+    100% auto,
+    cover,
+    cover;
+  background-repeat: no-repeat;
+  padding-top: 104px;
+
+  @include mobile {
+    height: 312px;
+    background-image:
+      url("/src/assets/images/searchbar-bg-sm.png"),
+      linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+      url("/src/assets/images/webp-images/earth-explode.webp");
+    background-position:
+      center bottom,
+      center center,
+      right -330px center;
+  }
+}
+
+.form-control,
+.form-select {
+  background-color: $primary-50;
+  border: none;
+  outline: none;
+  :focus {
+    background-color: $primary-50;
+  }
+}
+
+.btn-checkbox:checked {
+  background-color: $primary-600;
+}
+
+.bom-btn {
+  border: $primary-200;
+}
