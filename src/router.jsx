@@ -24,7 +24,7 @@ export const router = createHashRouter([
         element: <SearchResult />,
       },
       {
-        path: "mealsDetails",
+        path: "mealsDetails/:id",
         element: <MealsDetails />,
       },
       {
