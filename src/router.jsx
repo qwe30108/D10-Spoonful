@@ -1,7 +1,8 @@
 import { createHashRouter } from "react-router";
 import FrontendLayout from "./layout/FrontendLayout";
-import Home from "./pages/front/home";
+import Home from "./pages/front/Home";
 import About from "./pages/front/About";
+import SearchResult from "./pages/front/SearchResult";
 
 export const router = createHashRouter([
   {
@@ -15,6 +16,10 @@ export const router = createHashRouter([
       {
         path: "about",
         element: <About />,
+      },
+      {
+        path: "searchResult",
+        element: <SearchResult />,
       },
     ],
   },
