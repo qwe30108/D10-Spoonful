@@ -446,7 +446,7 @@ function SearchResults() {
                         <TagBadge tags={dish.tags} />
                         <div className="ms-lg-auto mx-auto mx-lg-0 flex-grow-1 flex-lg-grow-0">
                           <Link
-                            to={`/dish/${dish.id}`}
+                            to={`/mealsDetails/${dish.id}`}
                             className="btn rounded-pill text-white btn-secondary-700 py-3 px-lg-9 d-flex align-items-center justify-content-center w-100 w-lg-auto"
                           >
                             <span className="me-2">看更多</span>

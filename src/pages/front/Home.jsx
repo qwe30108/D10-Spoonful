@@ -14,7 +14,6 @@ function Home() {
   const [error, setError] = useState(null);
   const baseURL = "https://datasofspoonful.zeabur.app";
 
-  // 搜尋條件的 State
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState([]);
   const [city, setCity] = useState("台北市");
@@ -49,7 +48,6 @@ function Home() {
       setToptDishes(response.data);
       setIsLoading(false);
     } catch (error) {
-      //console.error("取得資料失敗", error);
       setError(error);
       setIsLoading(false);
     }
@@ -71,7 +69,6 @@ function Home() {
       setLatestDishes(response.data);
       setIsLoading(false);
     } catch (error) {
-      //console.error("取得資料失敗", error);
       setError(error);
       setIsLoading(false);
     }
@@ -317,7 +314,6 @@ function Home() {
         </div>
 
         <div className="container-fluid mx-auto px-3 px-lg-0">
-          {/* 放棄巢狀網格，改用單一層級的 food-grid-container */}
           <div className="food-grid-container">
             {/* 日式料理 */}
             <Link
@@ -465,7 +461,7 @@ function Home() {
                     </div>
                   </div>
                   <Link
-                    to={`/dish/${dish.id}`}
+                    to={`/mealsDetails/${dish.id}`}
                     className="stretched-link"
                   ></Link>
                 </div>
@@ -557,7 +553,7 @@ function Home() {
                     </div>
                     <div>
                       <Link
-                        to={`/dish/${dish.id}`}
+                        to={`/mealsDetails/${dish.id}`}
                         className="btn bg-white text-primary-950 rounded-pill px-md-3 py-md-1 d-flex align-items-center"
                       >
                         <p className="my-auto mb-0">
