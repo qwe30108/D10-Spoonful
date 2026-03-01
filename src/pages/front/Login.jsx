@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 
 function Login() {
   const baseURL = "https://datasofspoonful.zeabur.app";
@@ -14,16 +15,20 @@ function Login() {
   });
 
   const [token, setToken] = useState("");
+  const navigate = useNavigate();
 
   const signIn = async (formData) => {
     try {
       const response = await axios.post(`${baseURL}/login`, formData);
       console.log(response.data);
+      console.log(response.data.user);
       const { token, expired } = response.data;
 
       document.cookie = `hexToken=${token};expires=${new Date(expired)};`;
 
       axios.defaults.headers.common.Authorization = token;
+
+      navigate("/");
     } catch (error) {
       console.log(error.response.data.message);
     }
@@ -63,6 +68,9 @@ function Login() {
                   },
                 })}
               />
+              {errors.email && (
+                <p className="text-danger">{errors.email.message}</p>
+              )}
             </div>
             <div className="mb-3">
               <label
@@ -84,6 +92,9 @@ function Login() {
                   },
                 })}
               />
+              {errors.password && (
+                <p className="text-danger">{errors.password.message}</p>
+              )}
             </div>
 
             {/* 記住我  */}
