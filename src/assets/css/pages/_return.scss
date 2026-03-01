@@ -46,3 +46,42 @@
 .bom-btn {
   border: $primary-200;
 }
+
+.form-check-inline {
+  border: 1px solid $primary-200;
+  width: 50%;
+  @include pad {
+    width: 100%;
+  }
+}
+
+/* 容器與預覽圖設定 */
+.upload-preview-item,
+.upload-btn {
+  width: 120px;
+  height: 120px;
+  border: none;
+}
+
+/* 預覽圖縮放填滿 */
+.upload-preview-item img {
+  object-fit: cover;
+}
+
+/* 自定義上傳按鈕背景 */
+.upload-btn {
+  background-color: #fff3e0; /* 淺橘黃背景 */
+  transition: all 0.3s ease;
+}
+
+.upload-btn:hover {
+  background-color: $primary-50;
+}
+
+/* 內層黃色小方塊 */
+.upload-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  //background-color: $primary-500; /* 橘黃色按鈕 */
+  // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}

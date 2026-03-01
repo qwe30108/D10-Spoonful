@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 
 function Return() {
   const baseURL = "https://datasofspoonful.zeabur.app";
@@ -13,6 +14,7 @@ function Return() {
     mode: "onChange",
   });
   const [local, setLocal] = useState();
+  const navigate = useNavigate();
 
   const localData = [
     "基隆市",
@@ -63,6 +65,7 @@ function Return() {
           <div
             type="button"
             className="btn btn-outline-primary-700 rounded-circle d-block d-sm-block d-md-none me-3"
+            onClick={() => navigate(-1)}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -81,6 +84,7 @@ function Return() {
           <button
             type="button"
             className="btn btn-outline-primary-700 rounded-pill d-none d-sm-none d-md-block"
+            onClick={() => navigate(-1)}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -116,16 +120,16 @@ function Return() {
                 </div>
               </div>
               <div className="mb-4 d-flex flex-column">
-                <label htmlFor="selectLocal" className="fs-5 mb-2">
+                <label htmlFor="address" className="fs-5 mb-2">
                   地點<span className="text-alert">*</span>
                 </label>
                 <div>
                   <select
                     className="form-select "
                     aria-label="Large select example"
-                    id="selectLocal"
+                    id="address"
                     defaultValue=""
-                    {...register("selectLocal", { required: "請選擇地點" })}
+                    {...register("address", { required: "請選擇地點" })}
                   >
                     <option disabled hidden value="">
                       請選擇地點
@@ -141,14 +145,14 @@ function Return() {
                 </div>
               </div>
               <div className="mb-4 d-flex flex-column">
-                <label className="fs-5 mb-2">
+                <label className="fs-5 mb-2" htmlFor="title">
                   餐點<span className="text-alert">*</span>
                 </label>
                 <div>
                   <input
                     type="text"
                     className="form-control rounded-pill"
-                    id="floatingInput"
+                    id="title"
                     placeholder="請輸入餐點"
                   />
                 </div>
@@ -319,62 +323,130 @@ function Return() {
                     </div>
                   </div>
                 </div>
-              </div>
-              <label className="d-flex cursor-pointer me-4 mb-3">
-                <input
-                  type="text"
-                  id="other-input"
-                  className="d-none form-control rounded-pill"
-                  placeholder="請輸入其他地雷標籤"
-                />
-              </label>
-              <div className="d-flex flex-column">
-                <label htmlFor="" className="fs-5 mb-2">
-                  可客製化程度
+                <label className="d-flex cursor-pointer me-4 mb-3">
+                  <input
+                    type="text"
+                    id="other-input"
+                    className="d-none form-control rounded-pill"
+                    placeholder="請輸入其他地雷標籤"
+                  />
                 </label>
-                <div className="d-flex">
-                  <div className="form-check form-check-inline">
+              </div>
+
+              <div className="">
+                <div className="fs-5">可客製化程度</div>
+                <div className="d-flex flex-column flex-lg-row cursor-pointer">
+                  <div className="form-check form-check-inline px-4 pt-4 mt-4 rounded ">
                     <input
-                      className="form-check-input"
+                      className="form-check-input ms-0"
                       type="radio"
-                      name="inlineRadioOptions"
-                      id="inlineRadio1"
-                      value="option1"
+                      name="isCustomizable"
+                      id="customized"
+                      value="customized"
                     />
-                    <label className="form-check-label h5" for="inlineRadio1">
-                      可客製
+                    <label
+                      className="form-check-label ms-2"
+                      htmlFor="customized"
+                    >
+                      <h5 className="mb-1 text-primary-950">可客製</h5>
+                      <p className="fs-5 text-gray-600">或是可以自己挑掉</p>
                     </label>
-                    <p className="fs-5">或是可以自己挑掉</p>
                   </div>
-                  <div className="form-check form-check-inline">
+                  <div className="form-check form-check-inline px-4 pt-4 mt-4 rounded ">
                     <input
-                      className="form-check-input"
+                      className="form-check-input ms-0"
                       type="radio"
-                      name="inlineRadioOptions"
-                      id="inlineRadio2"
-                      value="option2"
+                      name="isCustomizable"
+                      id="no-customized"
+                      value="no-customized"
                     />
-                    <label className="form-check-label h5" for="inlineRadio2">
-                      地獄混入
+                    <label
+                      className="form-check-label ms-2"
+                      htmlFor="no-customized"
+                    >
+                      <h5 className="mb-1 text-primary-950">地獄混入</h5>
+                      <p className="fs-5 text-gray-600">無法挑掉最沒用的那種</p>
                     </label>
-                    <p className="fs-5">無法挑掉最沒用的那種</p>
                   </div>
                 </div>
               </div>
             </div>
+
             <div className="col-lg-6">
-              <div className="mb-3">
-                <label htmlFor="fileUpload" className="form-label">
-                  上傳圖片
-                </label>
-                <input
-                  className="form-control"
-                  type="file"
-                  name="fileUpload"
-                  id="fileUpload"
-                  accept=".jpg,.jpeg,.png"
-                  onChange={(e) => uploadImage(e)}
-                />
+              <div className="d-flex flex-column h-100">
+                <div className="mb-3">
+                  <label className="form-label fs-5">上傳圖片</label>
+                  <div className="d-flex flex-wrap gap-3">
+                    {/* 圖片預覽區塊 (假設已有預覽功能) */}
+                    {/* 這裡可以根據你的 state 渲染出已選擇的圖片 */}
+                    <div className="upload-preview-item rounded-4 overflow-hidden ">
+                      <img
+                        src="https://images.unsplash.com/photo-1588168333986-5078d3ae3976?q=80&w=300"
+                        alt="preview"
+                        className="img-fluid object-fit-cover w-100 h-100"
+                      />
+                    </div>
+
+                    {/* 自定義上傳按鈕 */}
+                    <label
+                      htmlFor="fileUpload"
+                      className="upload-btn d-flex align-items-center justify-content-center rounded-4 cursor-pointer"
+                    >
+                      <div className="upload-icon-wrapper d-flex align-items-center justify-content-center rounded-3">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            d="M18.5348 1.46447C17.0704 -1.19209e-07 14.7133 0 9.9993 0C5.28525 0 2.92823 -1.19209e-07 1.46377 1.46447C0.706282 2.22195 0.340603 3.21824 0.164062 4.65598C0.694733 4.06532 1.33236 3.57328 2.04836 3.20846C2.82984 2.81027 3.66664 2.6488 4.59316 2.5731C5.48829 2.49997 6.58971 2.49998 7.93646 2.5H12.0621C13.4089 2.49998 14.5103 2.49997 15.4054 2.5731C16.332 2.6488 17.1688 2.81027 17.9502 3.20846C18.6662 3.57328 19.3039 4.06532 19.8345 4.65598C19.658 3.21824 19.2923 2.22195 18.5348 1.46447Z"
+                            fill="currentColor"
+                          />
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M0 12C0 9.1997 5.96046e-08 7.79961 0.54497 6.73005C1.02433 5.78924 1.78924 5.02433 2.73005 4.54497C3.79961 4 5.19974 4 8 4H12C14.8003 4 16.2004 4 17.27 4.54497C18.2108 5.02433 18.9757 5.78924 19.455 6.73005C20 7.79961 20 9.1997 20 12C20 14.8003 20 16.2004 19.455 17.27C18.9757 18.2108 18.2108 18.9757 17.27 19.455C16.2004 20 14.8003 20 12 20H8C5.19974 20 3.79961 20 2.73005 19.455C1.78924 18.9757 1.02433 18.2108 0.54497 17.27C5.96046e-08 16.2004 0 14.8003 0 12ZM10.5303 8.4697C10.3897 8.329 10.1989 8.25 10 8.25C9.8011 8.25 9.6103 8.329 9.4697 8.4697L6.96967 10.9697C6.67678 11.2626 6.67678 11.7374 6.96967 12.0303C7.26256 12.3232 7.73744 12.3232 8.0303 12.0303L9.25 10.8107V15C9.25 15.4142 9.5858 15.75 10 15.75C10.4142 15.75 10.75 15.4142 10.75 15V10.8107L11.9697 12.0303C12.2626 12.3232 12.7374 12.3232 13.0303 12.0303C13.3232 11.7374 13.3232 11.2626 13.0303 10.9697L10.5303 8.4697Z"
+                            fill="currentColor"
+                          />
+                        </svg>
+                      </div>
+                      <input
+                        className="d-none"
+                        type="file"
+                        id="fileUpload"
+                        accept=".jpg,.jpeg,.png"
+                        onChange={(e) => uploadImage(e)}
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                <div className="d-flex mt-auto justify-content-lg-end justify-content-center ">
+                  <button
+                    type="submit"
+                    className="btn btn-secondary-700 rounded-pill px-5 py-2 d-flex align-items-center"
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="me-2"
+                    >
+                      <path
+                        d="M20 6L9 17L4 12"
+                        stroke="white"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    送出
+                  </button>
+                </div>
               </div>
             </div>
           </div>
