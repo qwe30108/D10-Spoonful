@@ -8,6 +8,7 @@ import BlacklistFavorites from "./pages/back/BlacklistFavorites";
 import NotFound from "./pages/front/NotFound";
 import Login from "./pages/front/Login";
 import Return from "./pages/front/Return";
+import News from "./pages/front/News";
 
 export const router = createHashRouter([
   {
@@ -41,6 +42,10 @@ export const router = createHashRouter([
       {
         path: "return",
         element: <Return />,
+      },
+      {
+        path: "news",
+        element: <News />,
       },
     ],
   },

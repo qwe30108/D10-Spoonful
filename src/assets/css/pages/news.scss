@@ -1,0 +1,138 @@
+.news-background {
+  height: 449px;
+  background: url("../../images/news-mask.png"), var(--dynamic-bg, transparent);
+
+  background-position:
+    center bottom,
+    center center,
+    center center;
+  background-size:
+    100% 449px,
+    cover,
+    cover;
+  background-repeat: no-repeat;
+
+  @media screen and (min-width: 992px) {
+    height: 450px;
+    background:
+      url("../../images/news-mask.png"), var(--dynamic-bg, transparent);
+    background-position:
+      center bottom,
+      center center,
+      center center;
+    background-size:
+      100% 100%,
+      cover,
+      cover;
+    background-repeat: no-repeat;
+  }
+}
+.hero-img {
+  height: "180px";
+  object-fit: "cover";
+}
+
+.category-header-line {
+  height: 1px;
+  background-color: $secondary-800;
+  margin: 0 12px;
+}
+
+.small-title {
+  display: inline-block;
+}
+
+// 指示條
+.news-indicators {
+  display: flex;
+  gap: 8px; // 小圓點間距
+
+  .indicator-item {
+    width: 8px;
+    height: 8px;
+    border: 1px solid var(--bs-primary-500);
+    border-radius: 50%;
+    cursor: pointer;
+
+    &.active {
+      width: 24px;
+      background-color: var(--bs-primary-500);
+      border: none;
+      border-radius: 4px;
+    }
+  }
+}
+
+// 切換按鈕
+.news-controls {
+  display: flex;
+  gap: 20px; // 大圓點間距
+
+  .btn-news-ctrl {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--bs-primary-500);
+    border: none;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+  }
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+}
+
+.search-field {
+  width: 100%;
+  border: none;
+
+  @media screen and (min-width: 992px) {
+    max-width: 300px;
+  }
+}
+
+.nav-tabs {
+  cursor: pointer;
+}
+
+.news-card {
+  .card-img-top {
+    height: 180px;
+    object-fit: cover;
+    border-radius: 20px;
+    @media screen and (min-width: 992px) {
+      height: 165px;
+    }
+  }
+
+  // 限制行數
+  .summary-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    line-clamp: 2;
+  }
+}
+
+.load-more-btn {
+  background-color: var(--bg-primary-50);
+  color: var(--bs-primary-700);
+  border: 1px solid var(--bs-primary-700);
+  padding-left: 48px;
+  padding-right: 48px;
+  font-weight: 500;
+  font-size: 14px;
+
+  &:hover {
+    background-color: var(--bs-primary-700);
+    color: white;
+  }
+}
