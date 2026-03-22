@@ -106,6 +106,14 @@ function Home() {
     "台中市",
     "彰化縣",
   ];
+  const foodCategories = [
+    { title: "日式料理", img: "sushi-3-kinds.WEBP" },
+    { title: "義國風味", img: "italian-food-pasta.WEBP" },
+    { title: "韓國美食", img: "korean-food-bibimbap.WEBP" },
+    { title: "泰式料理", img: "thai-food-tomkhakai.WEBP" },
+    { title: "美式經典", img: "burger-fries.webp" },
+    { title: "台式小吃", img: "raised-pork-rice.WEBP" },
+  ];
 
   return (
     <div className="container">
@@ -312,105 +320,23 @@ function Home() {
           <h2 className="my-12">今天想吃些什麼</h2>
           <p className="small-title h3 mb-40">選個想吃的吧!</p>
         </div>
-
-        <div className="container-fluid mx-auto px-3 px-lg-0">
-          <div className="food-grid-container">
-            {/* 日式料理 */}
+        <div className="what-to-eat-cards">
+          {foodCategories.map((item) => (
             <Link
-              to="/searchResult?type=日式料理"
-              className="item-sushi text-decoration-none"
+              key={item.title}
+              className="card"
+              to={`/searchResult?type=${item.title}`}
             >
-              <div className="card-lg-lg image-with-gradient h-100">
-                <img
-                  src="https://raw.githubusercontent.com/qwe30108/D10-Spoonful/assets/add-webp-images/src/assets/images/webp-images/sushi-3-kinds.WEBP"
-                  alt="壽司"
-                  className="taiwanese-food-card"
-                />
-                <div className="card-lg-green-banner"></div>
-                <h3 className="card-lg-banner-text text-white">日式料理</h3>
+              <img
+                src={`https://raw.githubusercontent.com/qwe30108/D10-Spoonful/assets/add-webp-images/src/assets/images/webp-images/${item.img}`}
+                alt={item.title}
+                className="food-category"
+              />
+              <div className="card-body">
+                <h4 className="card-text">{item.title}</h4>
               </div>
             </Link>
-
-            {/* 義國風味 */}
-            <Link
-              to="/searchResult?type=義國風味"
-              className="item-italian text-decoration-none"
-            >
-              <div className="card-md image-with-gradient h-100">
-                <div className="card-lg-green-banner"></div>
-                <img
-                  src="https://raw.githubusercontent.com/qwe30108/D10-Spoonful/assets/add-webp-images/src/assets/images/webp-images/italian-food-pasta.WEBP"
-                  alt="義國風味"
-                  className="taiwanese-food-card"
-                />
-                <h3 className="card-md-banner-text text-white">義國風味</h3>
-              </div>
-            </Link>
-
-            {/* 韓國美食 */}
-            <Link
-              to="/searchResult?type=韓國美食"
-              className="item-korean text-decoration-none"
-            >
-              <div className="card-md image-with-gradient h-100">
-                <div className="card-lg-green-banner"></div>
-                <img
-                  src="https://raw.githubusercontent.com/qwe30108/D10-Spoonful/assets/add-webp-images/src/assets/images/webp-images/korean-food-bibimbap.WEBP"
-                  alt="韓國美食"
-                  className="taiwanese-food-card"
-                />
-                <h3 className="card-md-banner-text text-white">韓國美食</h3>
-              </div>
-            </Link>
-
-            {/* 泰式料理 */}
-            <Link
-              to="/searchResult?type=泰式料理"
-              className="item-thai text-decoration-none"
-            >
-              <div className="card-md image-with-gradient h-100">
-                <div className="card-lg-green-banner"></div>
-                <img
-                  src="https://raw.githubusercontent.com/qwe30108/D10-Spoonful/assets/add-webp-images/src/assets/images/webp-images/thai-food-tomkhakai.WEBP"
-                  alt="泰式料理"
-                  className="taiwanese-food-card"
-                />
-                <h3 className="card-md-banner-text text-white">泰式料理</h3>
-              </div>
-            </Link>
-
-            {/* 美式經典 */}
-            <Link
-              to="/searchResult?type=美式經典"
-              className="item-american text-decoration-none"
-            >
-              <div className="card-md image-with-gradient h-100">
-                <div className="card-lg-green-banner"></div>
-                <img
-                  src="https://raw.githubusercontent.com/qwe30108/D10-Spoonful/assets/add-webp-images/src/assets/images/webp-images/burger-fries.webp"
-                  alt="美式經典"
-                  className="taiwanese-food-card"
-                />
-                <h3 className="card-md-banner-text text-white">美式經典</h3>
-              </div>
-            </Link>
-
-            {/* 台式小吃 */}
-            <Link
-              to="/searchResult?type=台式小吃"
-              className="item-taiwanese text-decoration-none"
-            >
-              <div className="card-long image-with-gradient h-100">
-                <div className="card-lg-green-banner"></div>
-                <img
-                  src="https://raw.githubusercontent.com/qwe30108/D10-Spoonful/assets/add-webp-images/src/assets/images/webp-images/raised-pork-rice.WEBP"
-                  alt="台式小吃"
-                  className="taiwanese-food-card"
-                />
-                <h3 className="card-long-banner-text text-white">台式小吃</h3>
-              </div>
-            </Link>
-          </div>
+          ))}
         </div>
       </div>
       <div className="background-top"></div>

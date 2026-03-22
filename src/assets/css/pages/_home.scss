@@ -554,231 +554,69 @@ body {
   }
 }
 
-/* === 待修正 === */
-/* 1. 外層容器：鎖定最大寬度，避免出現 X 軸 */
-.what-to-eat .container-fluid {
-  max-width: 1296px;
-  overflow-x: hidden;
-  padding: 0 12px;
-}
-
-/* 2. Grid 網格系統 */
-.food-grid-container {
+.what-to-eat-cards {
+  /*  5x2 網格 --- */
   display: grid;
   gap: 12px;
-  width: 100%;
+  height: 390px;
+  grid-template-columns: repeat(5, 1fr); /* 橫向分 5 格 */
+  grid-template-rows: repeat(2, 1fr); /* 直向分 2 格 */
 
-  /* 預設手機版：雙欄排版 */
-  grid-template-columns: repeat(2, 1fr);
-
-  > a {
-    display: block;
-    width: 100%;
-    height: 100%;
-    text-decoration: none;
-    min-width: 0;
-  }
-}
-
-/* 3. 卡片與圖片基礎設定 */
-.food-grid-container {
-  .card-lg-lg,
-  .card-md,
-  .card-long {
+  .card {
     position: relative;
-    width: 100%;
-    height: 100%;
-    border-radius: 16px;
+    border-radius: 20px;
     overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-  }
-
-  .card-md {
-    aspect-ratio: 1 / 1; /* 只有手機版小圖片保持正方形 */
-  }
-
-  /* 文字拉到最上層 */
-  .card-lg-banner-text,
-  .card-md-banner-text,
-  .card-long-banner-text {
-    position: absolute;
-    bottom: 16px;
-    left: 16px;
     margin: 0;
-    z-index: 20;
-    color: #fff;
-    font-weight: bold;
   }
-
-  .card-lg-green-banner {
+  .card:hover {
+    .card-body {
+      background-color: var(--bs-secondary-500);
+    }
+  }
+  .card-body {
     position: absolute;
     bottom: 0;
     left: 0;
+    padding: 16px;
     width: 100%;
-    height: 55px;
-    background-color: rgba(97, 164, 77, 0.95);
-    z-index: 10;
-    opacity: 0;
   }
 
-  > a:hover .card-lg-green-banner {
-    opacity: 1;
+  .card-text {
+    color: white;
+    margin: 0;
   }
 
-  /* 漸層遮罩 */
-  .image-with-gradient::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 40%;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-    z-index: 5;
-    pointer-events: none;
+  /* 第 1 張 (日式)：合併 2 個直行、2 個橫列 */
+  .card:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  /* 第 6 張 (台式)：合併 2 個直行 */
+  .card:nth-child(6) {
+    grid-column: span 2;
   }
 }
 
-@media screen and (min-width: 992px) {
-  .food-grid-container {
-    grid-template-columns: repeat(5, 1fr);
-
-    grid-template-areas:
-      "sushi sushi italian korean thai"
-      "sushi sushi american taiwanese taiwanese";
-  }
-
-  /* 對應各個區塊，塞進拼圖裡 */
-  .item-sushi {
-    grid-area: sushi;
-  }
-  .item-italian {
-    grid-area: italian;
-  }
-  .item-korean {
-    grid-area: korean;
-  }
-  .item-thai {
-    grid-area: thai;
-  }
-  .item-american {
-    grid-area: american;
-  }
-  .item-taiwanese {
-    grid-area: taiwanese;
-  }
-
-  .food-grid-container > a .card-md {
-    aspect-ratio: 1 / 1;
-  }
-  .food-grid-container > a .card-lg-lg {
-    aspect-ratio: auto;
-    height: 390px; /* 桌機版日式料理高度設為390px */
-  }
-  .food-grid-container > a .card-long {
-    aspect-ratio: auto;
-    height: 100%;
-  }
+.food-category {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
-@media screen and (max-width: 991px) {
-  .food-grid-container > a .card-lg-lg {
-    aspect-ratio: auto !important;
-    height: 164px !important;
-  }
-}
+@media screen and (max-width: 992px) {
+  .what-to-eat-cards {
+    display: flex;
+    flex-wrap: wrap;
+    height: auto;
+    gap: 20px 24px;
 
-.what-to-eat {
-  a {
-    display: block;
-    height: 100%;
-    text-decoration: none;
-  }
-
-  .g-3 {
-    --bs-gutter-x: 12px;
-    --bs-gutter-y: 12px;
-  }
-  .card-lg-lg,
-  .card-md,
-  .card-long {
-    position: relative;
-    width: 100%;
-    border-radius: 16px;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.3s ease;
+    .card {
+      width: calc((100% - 24px) / 2);
     }
-
-    /* 漸層黑底，讓白色文字清楚浮現 */
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 50%;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    /* 標題文字絕對定位 */
-    h3 {
-      position: absolute;
-      bottom: 16px;
-      left: 16px;
-      margin: 0;
-      z-index: 10;
-      color: white;
-      font-weight: bold;
-    }
-  }
-
-  /* 4. 壽司卡片專屬 Hover 綠色區塊 */
-  .card-lg-green-banner {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 55px;
-    background-color: rgba(97, 164, 77, 0.95); /* 設計稿綠色 */
-    z-index: 5;
-    opacity: 0; /* 預設隱藏 */
-    transition: opacity 0.3s ease;
-  }
-
-  /* Hover 效果：圖片微放大 + 綠底浮現 */
-  .card-lg-lg:hover {
-    .card-lg-green-banner {
-      opacity: 1;
-    }
-    img {
-      transform: scale(1.05);
-    }
-  }
-}
-
-@media screen and (min-width: 992px) {
-  .what-to-eat {
-    .card-lg-lg {
-      height: 390px;
-    }
-
-    .card-md,
-    .card-long {
-      height: calc((390px - 12px) / 2);
+    .card-body {
+      padding: 12px;
     }
   }
 }
