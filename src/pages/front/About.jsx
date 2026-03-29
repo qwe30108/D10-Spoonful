@@ -33,7 +33,7 @@ function About() {
           <div className="col-md-8 mt-8 mb-8">
             <img
               className="img-fluid rounded-3"
-              src={`/src/assets/images/yellow-brown-food.jpg`}
+              src={`${import.meta.env.BASE_URL}assets/images/yellow-brown-food.jpg`}
               alt="滿桌食物"
             />
           </div>

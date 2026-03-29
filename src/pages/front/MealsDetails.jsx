@@ -32,7 +32,7 @@ function CommentCard({ reviews }) {
               <img
                 src={
                   review.images[0] ||
-                  "../src/assets/images/webp-images/no-image.webp"
+                  `${import.meta.env.BASE_URL}assets/images/webp-images/no-image.webp`
                 }
                 className="img-fluid rounded-3 mb-4 mb-md-0"
                 alt={`評論 ${index + 1}`}
@@ -142,7 +142,7 @@ function DishCard({ dish }) {
         <div className="mt-6 d-md-flex align-items-center">
           {dish.isCustomizable && (
             <img
-              src="../src/assets/images//webp-images/customization_64.WEBP"
+              src={`${import.meta.env.BASE_URL}assets/images/webp-images/customization_64.WEBP`}
               className="me-4 mb-4"
               alt="可客製"
             />
