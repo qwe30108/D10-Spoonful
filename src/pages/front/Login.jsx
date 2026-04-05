@@ -14,6 +14,7 @@ function Login() {
     mode: 'onChange',
   });
 
+  // eslint-disable-next-line no-unused-vars
   const [token, setToken] = useState('');
   const navigate = useNavigate();
   const signIn = async (formData) => {
