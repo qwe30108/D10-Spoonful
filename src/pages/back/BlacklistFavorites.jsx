@@ -4,26 +4,59 @@ import TagBadge from '../../component/TagBadge';
 import BlacklistFavoriteItem from '../../component/BlacklistFavoriteItem';
 
 function BlacklistFavorites() {
-  const [collections, setCollections] = useState([]);
+  const [collections, setCollections] = useState([]); // 儲存所有的清單類別 (愛店、絕不吃等)
+  const [allDishes, setAllDishes] = useState([]); // 儲存所有餐點詳情
+  const [allShops, setAllShops] = useState([]); // 儲存所有餐廳資訊
+  const [activeTabId, setActiveTabId] = useState(null); // 目前選中的頁籤 ID
   const baseURL = 'https://datasofspoonful.zeabur.app';
+
   useEffect(() => {
-    const getCollections = async () => {
+    const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get(`${baseURL}/collections?userId=${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const userId = localStorage.getItem('userId');
+        if (!userId) return;
 
-        console.log('成功抓取資料：', res.data);
-        setCollections(res.data);
+        // 抓取清單
+        const [resCol, resDishes, resRestaurants] = await Promise.all([
+          axios.get(`${baseURL}/collections?userId=${userId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${baseURL}/dishes`),
+          axios.get(`${baseURL}/restaurants`),
+        ]);
+
+        setCollections(resCol.data);
+        setAllDishes(resDishes.data);
+        setAllShops(resRestaurants.data);
+        // 預設選中第一個頁籤
+        if (resCol.data.length > 0) {
+          setActiveTabId(resCol.data[0].id);
+        }
       } catch (error) {
-        console.error('抓取資料失敗', error.response);
+        console.error('抓取資料失敗', error);
       }
     };
-    getCollections();
+    fetchData();
   }, []);
+  // 選中的頁籤 ID過濾出該清單內的餐點詳情
+  const getDisplayItems = () => {
+    const currentTab = collections.find((col) => col.id === activeTabId);
+    if (!currentTab || !currentTab.dishIds) return [];
+
+    return allDishes
+      .filter((dish) => currentTab.dishIds.includes(dish.id))
+      .map((dish) => {
+        const restaurant = allShops.find((r) => r.id === dish.restaurantId);
+        return {
+          ...dish,
+          title: dish.name || dish.title,
+          shopName: restaurant ? restaurant.name : '未知餐廳',
+        };
+      });
+  };
+
+  const displayItems = getDisplayItems();
   return (
     <div className='container blacklist-favorites my-120'>
       <h1 className='d-md-none'>我的黑名單/喜愛清單</h1>
@@ -95,70 +128,33 @@ function BlacklistFavorites() {
             </ul>
           </div>
         </div>
-
         <div className='col-md-9 px-40 py-40 right-list'>
-          <div className='d-flex justify-content-between align-items-center'>
-            <ul className='nav nav-tabs justify-content-start ' id='pills-tab' role='tablist'>
-              <li className='nav-item  ' role='presentation'>
-                <button
-                  className='nav-link active border-0'
-                  id='pills-info-tab'
-                  data-bs-toggle='pill'
-                  data-bs-target='#pills-info'
-                  type='button'
-                  role='tab'
-                  aria-controls='pills-info'
-                  aria-selected='true'
-                >
-                  愛店
-                </button>
-              </li>
-              <li className='nav-item me-4' role='presentation'>
-                <button
-                  className='nav-link'
-                  id='pills-record-tab'
-                  data-bs-toggle='pill'
-                  data-bs-target='#pills-record'
-                  type='button'
-                  role='tab'
-                  aria-controls='pills-record'
-                  aria-selected='false'
-                >
-                  絕不吃
-                </button>
-              </li>
+          <div className='d-flex justify-content-between align-items-center border-bottom mb-4'>
+            {/* 頁籤標籤 */}
+            <ul className='nav nav-tabs border-0' role='tablist'>
+              {collections.map((tab) => (
+                <li className='nav-item' key={tab.id}>
+                  <button
+                    className={`nav-link border-0 ${activeTabId === tab.id ? 'active ' : ''}`}
+                    onClick={() => setActiveTabId(tab.id)}
+                    type='button'
+                  >
+                    {tab.name}
+                  </button>
+                </li>
+              ))}
             </ul>
-
             <button className='add-button '>+</button>
           </div>
+
           <div className='tab-content'>
-            {/* 愛店分頁 */}
-            <div
-              className='tab-pane fade show active'
-              id='pills-info'
-              role='tabpanel'
-              aria-labelledby='pills-info-tab'
-              tabIndex='0'
-            >
-              {collections.length > 0 ? (
-                collections.map((item) => <BlacklistFavoriteItem key={item.id} item={item} />)
+            <div className='tab-pane fade show active'>
+              {/* 當前頁籤內的餐點 */}
+              {displayItems.length > 0 ? (
+                displayItems.map((item) => <BlacklistFavoriteItem key={item.id} item={item} />)
               ) : (
-                <div className='py-5 text-center text-muted'>目前沒有收藏項目</div>
+                <div className='py-5 text-center text-muted'>{activeTabId ? '目前清單內沒有項目' : '讀取中...'}</div>
               )}
-
-              {/* 頁碼導航 */}
-              <nav aria-label='Page navigation example'>...</nav>
-            </div>
-
-            {/* 絕不吃分頁 */}
-            <div
-              className='tab-pane fade'
-              id='pills-record'
-              role='tabpanel'
-              aria-labelledby='pills-record-tab'
-              tabIndex='0'
-            >
-              <div className='py-5 text-center text-muted'>目前沒有黑名單項目</div>
             </div>
           </div>
         </div>

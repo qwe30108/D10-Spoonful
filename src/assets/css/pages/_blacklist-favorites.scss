@@ -7,23 +7,26 @@
     font-size: $h2-font-size;
   }
 
-  /* 預設頁籤樣式（未被點擊時） */
-  .nav-tabs .nav-link {
-    background-color: #fff;
-    color: black; /* 設定文字顏色 */
-    border: none; /* 移除邊框 */
-  }
-
-  /* 點擊後啟用頁籤樣式 */
-  .nav-tabs .nav-link.active {
-    background-color: rgba(229, 156, 10, 1); /* 白色背景 */
-    color: white; /* 文字顏色 */
-    border: none; /* 移除邊框 */
-  }
-
-  .nav-tabs {
+  .nav.nav-tabs {
     border-bottom: none;
     --bs-nav-tabs-border-width: 0;
+    .nav-item {
+      .nav-link {
+        background-color: #fff;
+        color: $primary-950;
+        border: none;
+        &:hover {
+          background-color: $primary-50;
+          color: $primary-950;
+          border: none;
+        }
+        &.active {
+          background-color: $primary-600;
+          color: $primary-50;
+          border: none;
+        }
+      }
+    }
   }
 
   /* 右側加號按鈕樣式 */
@@ -86,6 +89,7 @@
 
   .card-title {
     color: $primary-950;
+    font-weight: 400;
   }
   .card-text {
     color: $gray-900;
@@ -142,13 +146,16 @@
     margin: 0;
   }
   .delete-button {
-    background-color: $primary-50;
+    border-color: 1px $primary-700;
     border-radius: 50%;
     width: 40px;
     height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
+    &:hover {
+      background: $primary-50;
+    }
   }
 
   .page-link {

@@ -19,16 +19,15 @@ function Login() {
   const signIn = async (formData) => {
     try {
       const response = await axios.post(`${baseURL}/login`, formData);
-      const { accessToken } = response.data;
-
+      const { accessToken, user } = response.data;
       if (accessToken) {
         localStorage.setItem('token', accessToken);
-
+        localStorage.setItem('userId', user.id);
         console.log('Token 已成功存入！');
         navigate('/blacklistFavorites');
       }
     } catch (error) {
-      console.log('登入失敗', error.response?.data?.message);
+      console.log('登入失敗', error.response.data.message);
     }
   };
   // const signIn = async (formData) => {
